@@ -1,0 +1,41 @@
+import javax.swing.*;
+import javax.sound.sampled.*;
+import java.io.*;
+
+public class Player {
+	
+	public Clip clip;
+	
+	public void playmusic(String musicfile) {
+		File soundFile = new File(musicfile);
+		try {
+			
+			if (musicfile.equals("stop")) 
+			{
+				
+				clip.stop();
+				clip.flush();
+				clip.close();
+				
+			}
+			else {
+				 if ((clip == null) || (!clip.isActive())) {
+			AudioInputStream inputStream= AudioSystem.getAudioInputStream(soundFile);
+			clip = AudioSystem.getClip();
+			clip.open(inputStream);
+			clip.loop(1);
+			clip.start();
+		}
+			}
+		}
+		
+	catch(Exception e)
+		{
+		System.out.println(e);
+		}
+	
+		
+	
+	}
+
+}
