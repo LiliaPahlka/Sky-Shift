@@ -1,0 +1,85 @@
+import javax.swing.ImageIcon;
+
+public class Petal {
+
+    private int x, y, width, height, dy, dx;
+    private ImageIcon pic;
+
+    public Petal(int screenWidth) {
+        width = 40;
+        height = 40;
+        x = screenWidth - width;
+        y = 0;
+        pic = new ImageIcon("petal.png");
+        dy = 2;
+        dx = -1;
+    }
+
+    public void update() {
+        y += dy;
+        x += dx;
+    }
+
+    public boolean collidesWith(Character character) {
+        return x < character.getX() + character.getWidth() &&
+               x + width > character.getX() &&
+               y < character.getY() + character.getHeight() &&
+               y + height > character.getY();
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getDy() {
+        return dy;
+    }
+
+    public void setDy(int dy) {
+        this.dy = dy;
+    }
+
+    public int getDx() {
+        return dx;
+    }
+
+    public void setDx(int dx) {
+        this.dx = dx;
+    }
+
+    public ImageIcon getPic() {
+        return pic;
+    }
+
+    public void setPic(ImageIcon pic) {
+        this.pic = pic;
+    }
+}
