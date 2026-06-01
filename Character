@@ -9,7 +9,7 @@ public class Character {
 
         x = 650;
         y = 350;
-        pic = new ImageIcon("star.png");
+        pic = new ImageIcon("star.jpg");
         width = 200;
         height = 200;
         dx = 0;
