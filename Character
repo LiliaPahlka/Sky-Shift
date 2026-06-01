@@ -1,0 +1,102 @@
+import javax.swing.ImageIcon;
+
+public class Character {
+
+    private int x, y, dx, width, height, score;
+    private ImageIcon pic;
+
+    public Character(){
+
+        x = 650;
+        y = 350;
+        pic = new ImageIcon("star.png");
+        width = 200;
+        height = 200;
+        dx = 0;
+        
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getDx() {
+        return dx;
+    }
+
+    public void setDx(int dx) {
+        this.dx = dx;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public ImageIcon getPic() {
+        return pic;
+    }
+
+    public void setPic(ImageIcon pic) {
+        this.pic = pic;
+    }
+
+public void move(){
+    x+=dx;
+
+    if(x<0){
+        x=0;
+    }
+
+if (x+width > 1400){
+    x = 1400-width;
+}
+}
+
+public int getScore(){
+    return score;
+}
+
+public void setScore(int c){
+    score = c;
+}
+
+public void addPoint(){
+    score = score+1;
+    System.out.println(score);
+}
+
+public void minusPoint(){
+    score = score-1;
+    System.out.println(score);
+}
+
+public void clearScore(){
+    score = 0;
+}
+
+}
+
