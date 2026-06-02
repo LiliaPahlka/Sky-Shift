@@ -11,7 +11,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	private BufferedImage back; 
 	private int key, count, score, lives;
 	private char screen;
-	private Basket basket; 
+	private Character character; 
 	private ArrayList<Feather> feather;
 	private ArrayList<Leaf> leaf;
 	private ArrayList<Petal> petal;
@@ -153,7 +153,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 
 	public void drawCharacter(Graphics g2d){
 		g2d.drawImage(character.getPic().getImage(), character.getX(), character.getY(),
-		basket.getWidth(), basket.getHeight(), this);
+		character.getWidth(), character.getHeight(), this);
 	}
 	
 	public void getPetal(Graphics g2d){
@@ -359,7 +359,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 
 	public void removeOOBPetal(ArrayList<Petal>petal){
 		for(int i=0; i<petal.size(); i++){
-			Petal petaal = petal.get(i);
+			Petal petal = petal.get(i);
 			if(petal.getY() > 1000){
 				petal.remove(i);
 				i--;
@@ -379,7 +379,7 @@ public void resetGame() {
     petal.clear();
     leaf.clear();
     feather.clear();
-    drawgonfly.clear();
+    dragonfly.clear();
 }
 
 	//DO NOT DELETE
@@ -416,11 +416,11 @@ public void resetGame() {
 	public void keyReleased(KeyEvent e) {
 		
 	if(key == 37){
-		basket.setDx(0);
+		character.setDx(0);
 	}
 
 	if(key == 39){
-		basket.setDx(0);
+		character.setDx(0);
 	}
 
 	if (key == 32) { // Space key
@@ -450,7 +450,7 @@ public void resetGame() {
 	@Override
 	public void mouseMoved(MouseEvent m) {
 		// TODO Auto-generated method stub
-		basket.setX(m.getX());
+		character.setX(m.getX());
 	}
 
 
