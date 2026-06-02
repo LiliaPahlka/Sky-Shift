@@ -63,11 +63,11 @@ public class Feather {
     }
 
     public int getDy() {
-        return dy;
+        return dx;
     }
 
     public void setDy(int dy) {
-        this.dy = dy;
+        this.dx = dy;
     }
 
     public ImageIcon getPic() {
