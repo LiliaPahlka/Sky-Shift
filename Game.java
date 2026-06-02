@@ -4,497 +4,397 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.awt.event.*; 
 
+public class Game extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
-public class Game extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener{
+    private BufferedImage back; 
+    private int key, count, score, lives;
+    private char screen;
+    private Character character; 
+    private ArrayList<Feather> feather;
+    private ArrayList<Leaf> leaf;
+    private ArrayList<Petal> petal;
+    private ArrayList<Dragonfly> dragonfly;
+    private ImageIcon background;
 
-	
-	private BufferedImage back; 
-	private int key, count, score, lives;
-	private char screen;
-	private Character character; 
-	private ArrayList<Feather> feather;
-	private ArrayList<Leaf> leaf;
-	private ArrayList<Petal> petal;
-	private ArrayList<Dragonfly> dragonfly;
-	private ImageIcon background;
+    private boolean startScreen = true;
+    private String bgMusic;
 
-	private boolean startScreen = true;
-	private String bgMusic;
-
-
-	
-	public Game() {
-		new Thread(this).start();	
-		this.addKeyListener(this);		
-		this.addMouseListener(this);
-		this.addMouseMotionListener(this);
-		screen = 'G';
-		character = new Character();
-		feather = new ArrayList<Feather>();
-		leaf = new ArrayList<Leaf>();
-		petal = new ArrayList<Petal>();
-		dragonfly = new ArrayList<Dragonfly>();
-		count = 0;
-		score = 0;
-		lives = 5;
-		background = new ImageIcon("skybg.png");
-		bgMusic = "skybgm.wav";
-		SoundManager.playBackgroundMusic(bgMusic, true);
-
-	}
-
-	
-	
-	public void run()
-	   {
-	   	try
-	   	{
-	   		while(true)
-	   		{
-	   		   Thread.currentThread().sleep(5);
-	            repaint();
-	         }
-	      }
-	   		catch(Exception e)
-	      {
-	      }
-	  	}
-
-
-		public void screen(Graphics g2d){
-			
-			switch(screen){
-
-			case 'S':
-
-			break;
-			
-			case 'G':
-			count++;
-			getPetal(g2d);
-			getLeaf(g2d);
-			getDragonfly(g2d);
-			getFeather(g2d);
-			drawCharacter(g2d);
-			character.move();
-			checkCollisions();
-
-			if(!petal.isEmpty())
-			drawPetal(g2d);
-			if(!leaf.isEmpty())
-			drawLeaf(g2d);
-			if(!feather.isEmpty())
-			drawFeather(g2d);
-			if(!dragonfly.isEmpty())
-			drawDragonfly(g2d);
-
-			removeItems();
-			break;
-
-			case 'W':
-
-			break;
-
-			case 'L':
-
-			break;
-
-
-			}
-		}
-	
-	
-	public void paint(Graphics g) {
-    Graphics2D twoDgraph = (Graphics2D) g;
-
-    if (back == null) {
-        back = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+    public Game() {
+        new Thread(this).start();   
+        this.addKeyListener(this);      
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
+        screen = 'G';
+        character = new Character();
+        feather = new ArrayList<Feather>();
+        leaf = new ArrayList<Leaf>();
+        petal = new ArrayList<Petal>();
+        dragonfly = new ArrayList<Dragonfly>();
+        count = 0;
+        score = 0;
+        lives = 5;
+        background = new ImageIcon("skybg.png");
+        bgMusic = "skybgm.wav";
+        SoundManager.playBackgroundMusic(bgMusic, true);
+        setFocusable(true);
+        requestFocusInWindow();
     }
 
-    Graphics g2d = back.createGraphics();
-    g2d.clearRect(0, 0, getWidth(), getHeight());
+    public void run() {
+        try {
+            while (true) {
+                Thread.currentThread();
+				Thread.sleep(5);
+                repaint();
+            }
+        } catch (Exception e) {
+        }
+    }
 
-    if (startScreen) {
-		g2d.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
-        g2d.setFont(new Font("Georgia", Font.PLAIN, 50));
-        g2d.drawString("Press the spacebar to start", 400, 300);
-        g2d.setFont(new Font("Georgia", Font.BOLD, 50));
-        g2d.drawString("Welcome to Sky Shift", 320, 200);
-    } else {
-        g2d.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
+    public void screen(Graphics g2d) {
+        switch (screen) {
 
-        if (screen == 'L') {
-            g2d.setFont(new Font("Georgia", Font.BOLD, 60));
-            Color lightBlue= new Color(132, 173, 245);
-		g2d.setColor(lightBlue);
-            g2d.drawString("Game Over!", 500, 200);
-			g2d.setFont(new Font("Georgia", Font.PLAIN, 50));
-			g2d.setColor(lightBlue);
-            g2d.drawString("Press r to restart!", 490, 300);
-        } else if (screen == 'W') {
-            g2d.setFont(new Font("Georgia", Font.BOLD, 60));
-            g2d.setColor(Color.Blue);
-            g2d.drawString("You Won!", 500, 200);
-			g2d.setFont(new Font("Georgia", Font.PLAIN, 50));
-			g2d.setColor(Color.Blue);
-            g2d.drawString("Press r to restart!", 490, 300);
+            case 'S':
+                break;
+            
+            case 'G':
+                count++;
+                getPetal(g2d);
+                getLeaf(g2d);
+                getDragonfly(g2d);
+                getFeather(g2d);
+                drawCharacter(g2d);
+                character.move();
+                checkCollisions();
+
+                if (!petal.isEmpty())
+                    drawPetal(g2d);
+                if (!leaf.isEmpty())
+                    drawLeaf(g2d);
+                if (!feather.isEmpty())
+                    drawFeather(g2d);
+                if (!dragonfly.isEmpty())
+                    drawDragonfly(g2d);
+
+                removeItems();
+                break;
+
+            case 'W':
+                break;
+
+            case 'L':
+                break;
+        }
+    }
+
+    public void paint(Graphics g) {
+        Graphics2D twoDgraph = (Graphics2D) g;
+
+        if (back == null) {
+            back = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        }
+
+        Graphics g2d = back.createGraphics();
+        g2d.clearRect(0, 0, getWidth(), getHeight());
+
+        if (startScreen) {
+            g2d.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
+            g2d.setFont(new Font("Georgia", Font.PLAIN, 50));
+            g2d.drawString("Press the spacebar to start", 400, 300);
+            g2d.setFont(new Font("Georgia", Font.BOLD, 50));
+            g2d.drawString("Welcome to Sky Shift", 320, 200);
         } else {
-            screen(g2d);
+            g2d.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
+
+            if (screen == 'L') {
+                g2d.setFont(new Font("Georgia", Font.BOLD, 60));
+                Color lightBlue = new Color(132, 173, 245);
+                g2d.setColor(lightBlue);
+                g2d.drawString("Game Over!", 500, 200);
+                g2d.setFont(new Font("Georgia", Font.PLAIN, 50));
+                g2d.setColor(lightBlue);
+                g2d.drawString("Press r to restart!", 490, 300);
+            } else if (screen == 'W') {
+                g2d.setFont(new Font("Georgia", Font.BOLD, 60));
+                g2d.setColor(Color.blue);
+                g2d.drawString("You Won!", 500, 200);
+                g2d.setFont(new Font("Georgia", Font.PLAIN, 50));
+                g2d.setColor(Color.blue);
+                g2d.drawString("Press r to restart!", 490, 300);
+            } else {
+                screen(g2d);
+            }
+        }
+
+        g2d.setColor(Color.pink);
+        g2d.setFont(new Font("Georgia", Font.BOLD, 50));
+        g2d.drawString("Score: " + score, 100, 40);
+        g2d.drawString("Lives: " + lives, 100, 90);
+
+        twoDgraph.drawImage(back, null, 0, 0);
+    }
+
+    public void drawCharacter(Graphics g2d) {
+        g2d.drawImage(character.getPic().getImage(), character.getX(), character.getY(),
+                      character.getWidth(), character.getHeight(), this);
+    }
+
+    public void getPetal(Graphics g2d) {
+        if (count % 600 == 0) {
+            int screenWidth = getWidth();
+            int padding = 10;
+            int randX = padding + (int) (Math.random() * (screenWidth - (2 * padding)));
+            petal.add(new Petal(randX));
         }
     }
 
-	g2d.setColor(Color.Pink);
-	g2d.setFont(new Font("Georgia", Font.BOLD, 50));
-	g2d.drawString("Score: " + score, 100, 40);
-	g2d.drawString("Lives: " + lives, 100, 90);
-
-    twoDgraph.drawImage(back, null, 0, 0);
-}
-
-	public void drawCharacter(Graphics g2d){
-		g2d.drawImage(character.getPic().getImage(), character.getX(), character.getY(),
-		character.getWidth(), character.getHeight(), this);
-	}
-	
-	public void getPetal(Graphics g2d){
-
-		if(count % 600 == 0){
-			// get the screen width
-			int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-
-			// define the padding
-			int padding = 10;
-
-			// generate a random x coordinate within the screen width, ensuring the object is fully displayed
-			int randX = padding + (int) (Math.random() * (screenWidth - (2 * padding)));
-
-			// add a new object at the random x coordinate
-			petal.add(new Petal(randX));
-		}
-
-	}
-
-	public void drawFeather(Graphics g2d){
-		for(Feather feather: feather){
-			g2d.drawImage(feather.getPic().getImage(), feather.getX(), feather.getY(),
-			feather.getWidth(), feather.getHeight(), this);
-			feather.setDy(2);
-		}
-	}
-
-	public void removeOOBFeather(ArrayList<Feather>feather){
-		for(int i=0; i<feather.size(); i++){
-			Feather feather = feather.get(i);
-			if(feather.getY() > 1000){
-				feather.remove(i);
-				i--;
-			}
-		}
-	}
-
-	public void removeItems(){
-		removeOOBLeaf(leaf);
-		removeOOBPetal(petal);
-		removeOOBFeather(feather);
-		removeOOBDragonfly(dragonfly);
-	}
-
-	public void checkCollisions(){
-		checkObjectCollisionsa(leaf, 2);
-		checkObjectCollisionsb(petal, 2);
-		checkObjectCollisionsc(feather, 1);
-		checkObjectCollisionsd(dragonfly, -1);
-
-		checkGameStatus();
-	}
-
-	private void checkObjectCollisionsa(ArrayList<Leaf> leaf, int points){
-		for (int i = 0; i < leaf.size(); i++){
-			Leaf leaf = leaf.get(i);
-			if(leaf.collidesWith(character)){
-				score += points;
-				leaf.remove(i);
-				i--;
-			} 
-		}
-	}
-
-	private void checkObjectCollisionsb(ArrayList<Feather> feather, int points){
-		for (int i = 0; i < feather.size(); i++){
-			Feather feather = feather.get(i);
-			if(feather.collidesWith(character)){
-				score += points;
-				feather.remove(i);
-				i--;
-			} 
-		}
-	}
-
-	private void checkObjectCollisionsc(ArrayList<Petal> petal, int points){
-		for (int i = 0; i < petal.size(); i++){
-			Petal petal = petal.get(i);
-			if(petal.collidesWith(character)){
-				score += points;
-				petal.remove(i);
-				i--;
-			} 
-		}
-	}
-
-	private void checkObjectCollisionsd(ArrayList<Dragonfly> dragonfly, int points) {
-    for (int i = 0; i < dragonfly.size(); i++) {
-        Dragonfly dragonfly = dragonfly.get(i);
-        if (dragonfly.collidesWith(character)) {
-            score += points;
-            lives--;
-            dragonfly.remove(i);
-            i--;
+    public void drawPetal(Graphics g2d) {
+        for (Petal p : petal) {
+            g2d.drawImage(p.getPic().getImage(), p.getX(), p.getY(),
+                          p.getWidth(), p.getHeight(), this);
+            p.setDy(2);
         }
     }
-}
 
-	private void checkGameStatus(){
-		if (lives <= 0){
-			System.out.println("Game Over!");
-			screen = 'L';
-		}
-		else if (score >= 20){
-			System.out.println("You Win!");
-			screen = 'W';
-		}
-	}
+    public void removeOOBPetal(ArrayList<Petal> petalList) {
+        for (int i = 0; i < petalList.size(); i++) {
+            Petal p = petalList.get(i);
+            if (p.getY() > 1000) {
+                petalList.remove(i);
+                i--;
+            }
+        }
+    }
 
-	public void getLeaf(Graphics g2d){
+    public void drawFeather(Graphics g2d) {
+        for (Feather f : feather) {
+            g2d.drawImage(f.getPic().getImage(), f.getX(), f.getY(),
+                          f.getWidth(), f.getHeight(), this);
+            f.setDy(2);
+        }
+    }
 
-		if(count % 500 == 0){
-			// get the screen width
-			int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+    public void removeOOBFeather(ArrayList<Feather> featherList) {
+        for (int i = 0; i < featherList.size(); i++) {
+            Feather f = featherList.get(i);
+            if (f.getY() > 1000) {
+                featherList.remove(i);
+                i--;
+            }
+        }
+    }
 
-			// define the padding
-			int padding = 10;
+    public void removeItems() {
+        removeOOBLeaf(leaf);
+        removeOOBPetal(petal);
+        removeOOBFeather(feather);
+        removeOOBDragonfly(dragonfly);
+    }
 
-			// generate a random x coordinate within the screen width, ensuring the object is fully displayed
-			int randX = padding + (int) (Math.random() * (screenWidth - (2 * padding)));
+    public void checkCollisions() {
+        checkObjectCollisionsa(leaf, 2);
+        checkObjectCollisionsb(feather, 1);
+        checkObjectCollisionsc(petal, 2);
+        checkObjectCollisionsd(dragonfly, -1);
+        checkGameStatus();
+    }
 
-			// add a new object at the random x coordinate
-			leaf.add(new Leaf(randX));
-		}
+    private void checkObjectCollisionsa(ArrayList<Leaf> leafList, int points) {
+        for (int i = 0; i < leafList.size(); i++) {
+            Leaf l = leafList.get(i);
+            if (l.collidesWith(character)) {
+                score += points;
+                leafList.remove(i);
+                i--;
+            } 
+        }
+    }
 
-	}
+    private void checkObjectCollisionsb(ArrayList<Feather> featherList, int points) {
+        for (int i = 0; i < featherList.size(); i++) {
+            Feather f = featherList.get(i);
+            if (f.collidesWith(character)) {
+                score += points;
+                featherList.remove(i);
+                i--;
+            } 
+        }
+    }
 
-	public void drawLeaf(Graphics g2d){
-		for(Leaf leaf: leaf){
-			g2d.drawImage(leaf.getPic().getImage(), leaf.getX(), leaf.getY(),
-			leaf.getWidth(), leaf.getHeight(), this);
-			leaf.setDy(2);
+    private void checkObjectCollisionsc(ArrayList<Petal> petalList, int points) {
+        for (int i = 0; i < petalList.size(); i++) {
+            Petal p = petalList.get(i);
+            if (p.collidesWith(character)) {
+                score += points;
+                petalList.remove(i);
+                i--;
+            } 
+        }
+    }
 
-		}
-	}
+    private void checkObjectCollisionsd(ArrayList<Dragonfly> dragonflyList, int points) {
+        for (int i = 0; i < dragonflyList.size(); i++) {
+            Dragonfly d = dragonflyList.get(i);
+            if (d.collidesWith(character)) {
+                score += points;
+                lives--;
+                dragonflyList.remove(i);
+                i--;
+            }
+        }
+    }
 
-	public void removeOOBLeaf(ArrayList<Leaf>leaf){
-		for(int i=0; i<leaf.size(); i++){
-			Leaf leaf = leaf.get(i);
-			if(leaf.getY() > 1000){
-				leaf.remove(i);
-				i--;
-			}
-		}
-	}
+    private void checkGameStatus() {
+        if (lives <= 0) {
+            System.out.println("Game Over!");
+            screen = 'L';
+        } else if (score >= 20) {
+            System.out.println("You Win!");
+            screen = 'W';
+        }
+    }
 
-	public void getDragonfly(Graphics g2d){
+    public void getLeaf(Graphics g2d) {
+        if (count % 500 == 0) {
+            int screenWidth = getWidth();
+            int padding = 10;
+            int randX = padding + (int) (Math.random() * (screenWidth - (2 * padding)));
+            leaf.add(new Leaf(randX));
+        }
+    }
 
-		if(count % 600 == 0){
-			// get the screen width
-			int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+    public void drawLeaf(Graphics g2d) {
+        for (Leaf l : leaf) {
+            g2d.drawImage(l.getPic().getImage(), l.getX(), l.getY(),
+                          l.getWidth(), l.getHeight(), this);
+            l.setDy(2);
+        }
+    }
 
-			// define the padding
-			int padding = 10;
+    public void removeOOBLeaf(ArrayList<Leaf> leafList) {
+        for (int i = 0; i < leafList.size(); i++) {
+            Leaf l = leafList.get(i);
+            if (l.getY() > 1000) {
+                leafList.remove(i);
+                i--;
+            }
+        }
+    }
 
-			// generate a random x coordinate within the screen width, ensuring the object is fully displayed
-			int randX = padding + (int) (Math.random() * (screenWidth - (2 * padding)));
+    public void getDragonfly(Graphics g2d) {
+        if (count % 600 == 0) {
+            int screenWidth = getWidth();
+            int padding = 10;
+            int randX = padding + (int) (Math.random() * (screenWidth - (2 * padding)));
+            dragonfly.add(new Dragonfly(randX));
+        }
+    }
 
-			// add a new object at the random x coordinate
-			dragonfly.add(new Dragonfly(randX));
-		}
+    public void drawDragonfly(Graphics g2d) {
+        for (Dragonfly d : dragonfly) {
+            g2d.drawImage(d.getPic().getImage(), d.getX(), d.getY(),
+                          d.getWidth(), d.getHeight(), this);
+            d.setDy(2);
+        }
+    }
 
-	}
+    public void removeOOBDragonfly(ArrayList<Dragonfly> dragonflyList) {
+        for (int i = 0; i < dragonflyList.size(); i++) {
+            Dragonfly d = dragonflyList.get(i);
+            if (d.getY() > 1000) {
+                dragonflyList.remove(i);
+                i--;
+            }
+        }
+    }
 
-	public void drawDragonfly(Graphics g2d){
-		for(Dragonfly dragonfly: dragonfly){
-			g2d.drawImage(dragonfly.getPic().getImage(), dragonfly.getX(), dragonfly.getY(),
-			dragonfly.getWidth(), dragonfly.getHeight(), this);
-			dragonfly.setDy(2);
+    public void getFeather(Graphics g2d) {
+        if (count % 600 == 0) {
+            int screenWidth = getWidth();
+            int padding = 10;
+            int randX = padding + (int) (Math.random() * (screenWidth - (2 * padding)));
+            feather.add(new Feather(randX));
+        }
+    }
 
-		}
-	}
+    public void resetGame() {
+        screen = 'G';
+        startScreen = true;
+        score = 0;
+        lives = 5;
+        count = 0;
 
-	public void removeOOBDragonfly(ArrayList<Dragonfly>dragonfly){
-		for(int i=0; i<dragonfly.size(); i++){
-			Dragonfly dragonfly = dragonfly.get(i);
-			if(dragonfly.getY() > 1000){
-				dragonfly.remove(i);
-				i--;
-			}
-		}
-	}
+        character = new Character();
+        petal.clear();
+        leaf.clear();
+        feather.clear();
+        dragonfly.clear();
+    }
 
-	public void getFeather(Graphics g2d){
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
 
-		if(count % 600 == 0){
-			// get the screen width
-			int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+    @Override
+    public void keyPressed(KeyEvent e) {
+        key = e.getKeyCode();
+        System.out.println(key);
 
-			// define the padding
-			int padding = 10;
+        if (key == KeyEvent.VK_LEFT) {
+            character.setDx(-3);
+        }
 
-			// generate a random x coordinate within the screen width, ensuring the object is fully displayed
-			int randX = padding + (int) (Math.random() * (screenWidth - (2 * padding)));
+        if (key == KeyEvent.VK_RIGHT) {
+            character.setDx(3);
+        }
+    }
 
-			// add a new object at the random x coordinate
-			feather.add(new Feather(randX));
-		}
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int released = e.getKeyCode();
 
-	}
+        if (released == KeyEvent.VK_LEFT || released == KeyEvent.VK_RIGHT) {
+            character.setDx(0);
+        }
 
+        if (released == KeyEvent.VK_SPACE) {
+            if (startScreen) {
+                startScreen = false;
+                screen = 'G';
+            }
+        }
 
-	public void removeOOBPetal(ArrayList<Petal>petal){
-		for(int i=0; i<petal.size(); i++){
-			Petal petal = petal.get(i);
-			if(petal.getY() > 1000){
-				petal.remove(i);
-				i--;
-			}
-		}
-	}
+        if (released == KeyEvent.VK_R) {
+            resetGame();
+        }
+    }
 
+    @Override
+    public void mouseDragged(MouseEvent e) {
+    }
 
-public void resetGame() {
-    screen = 'G';
-    startScreen = true;
-    score = 0;
-    lives = 5;
-    count = 0;
+    @Override
+    public void mouseMoved(MouseEvent m) {
+        character.setX(m.getX());
+    }
 
-    character = new Character();
-    petal.clear();
-    leaf.clear();
-    feather.clear();
-    dragonfly.clear();
-}
+    @Override
+    public void mouseClicked(MouseEvent e) {        
+    }
 
-	//DO NOT DELETE
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void mousePressed(MouseEvent e) {        
+    }
 
+    @Override
+    public void mouseReleased(MouseEvent e) {       
+    }
 
+    @Override
+    public void mouseEntered(MouseEvent e) {        
+    }
 
-
-//DO NOT DELETE
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-		key= e.getKeyCode();
-		System.out.println(key);
-		
-	if(key == 37){
-		character.setDx(-3);
-	}
-		
-	if(key == 39){
-		character.setDx(3);
-	}
-	
-	}
-
-
-	//DO NOT DELETE
-	@Override
-	public void keyReleased(KeyEvent e) {
-		
-	if(key == 37){
-		character.setDx(0);
-	}
-
-	if(key == 39){
-		character.setDx(0);
-	}
-
-	if (key == 32) { // Space key
-    if (startScreen) {
-        startScreen = false;
-		screen = 'G';
-	}
-}
-
-	if (key == 82) {
-		resetGame();
-	}
-		
-		
-	}
-
-
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-
-
-	@Override
-	public void mouseMoved(MouseEvent m) {
-		// TODO Auto-generated method stub
-		character.setX(m.getX());
-	}
-
-
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
-	
-
-	
+    @Override
+    public void mouseExited(MouseEvent e) {     
+    }
 }
