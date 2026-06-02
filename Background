@@ -6,7 +6,7 @@ private int x,y,dx,dy;
 private int panelWidth;
 
 public Background(int panelWidth){
-background = "skybg.jpeg";
+background = "skybg.jpg";
 x=0;
 y=0;
 dy=0;
