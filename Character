@@ -7,7 +7,7 @@ public class Character {
 
     public Character(){
 
-        x = 650;
+        x = 50;
         y = 350;
         pic = new ImageIcon("star.jpg");
         width = 200;
