@@ -11,8 +11,8 @@ public class Petal {
         x = screenWidth - width;
         y = 0;
         pic = new ImageIcon("petal.png");
-        dy = 2;
-        dx = -1;
+        dx = 2;
+        dy = -1;
     }
 
     public void update() {
