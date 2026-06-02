@@ -2,7 +2,7 @@ import javax.swing.ImageIcon;
 
 public class Feather {
 
-    private int x, y, width, height, dy;
+    private int x, y, width, height, dx;
     private ImageIcon pic;
 
     public Feather() {
@@ -11,7 +11,7 @@ public class Feather {
         pic = new ImageIcon("feather.png");
         width = 70;
         height = 70;
-        dy = 1;
+        dx = 1;
     }
 
     public Feather(int xV) {
@@ -20,7 +20,7 @@ public class Feather {
         pic = new ImageIcon("feather.png");
         width = 100;
         height = 100;
-        dy = 2;
+        dx = 2;
     }
 
     public boolean collidesWith(Character character) {
