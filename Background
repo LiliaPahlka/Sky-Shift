@@ -10,7 +10,7 @@ background = "skybg.jpeg";
 x=0;
 y=0;
 dy=0;
-dx=-1;
+dx= 1;
 this.panelWidth = panelWidth;    
 
 
@@ -66,7 +66,7 @@ public void setPanelWidth(int panelWidth) {
 
 public void move(){
     x+=dx;
-    if(x<=-panelWidth){
+    if(x>=panelWidth){
         x=0;
     }
 }
