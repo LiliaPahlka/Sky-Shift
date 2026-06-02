@@ -2,7 +2,7 @@ import javax.swing.ImageIcon;
 
 public class Dragonfly {
 
-    private int x, y, width, height, dy;
+    private int x, y, width, height, dx;
     private ImageIcon pic;
 
     public Dragonfly() {
@@ -11,7 +11,7 @@ public class Dragonfly {
         pic = new ImageIcon("dragonfly.png");
         width = 90;
         height = 90;
-        dy = 1;
+        dx = 1;
     }
 
     public Dragonfly(int xV) {
@@ -20,7 +20,7 @@ public class Dragonfly {
         pic = new ImageIcon("dragonfly.png");
         width = 100;
         height = 100;
-        dy = 2;
+        dx = 2;
     }
 
     public boolean collidesWith(Character character) {
